@@ -1,2 +1,2 @@
-# Resort-Meter-Log
+# Resort Meter Log
 Resort Electricity Meter Reading App
