@@ -1,109 +1,229 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#173f32">
-<title>บันทึกเลขมิเตอร์ไฟฟ้า 3 หม้อ</title>
+<title>คำนวณค่าไฟ 6 มิเตอร์</title>
 <style>
-:root{--green:#173f32;--green2:#245544;--yellow:#f3c544;--cream:#f5f6f1;--line:#dfe5df;--text:#1d2924;--muted:#68766f}
+:root{--navy:#17365d;--blue:#2368a0;--line:#d8e1ea;--bg:#f3f6fa;--text:#243447;--muted:#65758b;--green:#176b45;--red:#a72c2c}
 *{box-sizing:border-box}
-body{margin:0;background:var(--cream);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif}
-header{background:linear-gradient(110deg,var(--green),#245944);color:#fff;padding:20px clamp(16px,4vw,40px);display:flex;align-items:center;gap:14px}
-.logo{height:52px;width:52px;display:grid;place-items:center;background:var(--yellow);border-radius:15px;color:var(--green);font-size:28px;font-weight:900}
-header h1{font-size:clamp(20px,3vw,28px);margin:0}header p{margin:4px 0 0;color:#e3eee7;font-size:14px}
-main{max-width:1000px;margin:26px auto;padding:0 16px 36px}
-.intro{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}
-.intro h2{margin:0 0 6px;font-size:clamp(22px,3vw,30px)}.intro p{margin:0;color:var(--muted)}
-.card{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 8px 28px #1d39220b;overflow:hidden}
-.cardhead{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}.cardhead h3{margin:0;font-size:19px}.hint{font-size:13px;color:var(--muted)}
-form{padding:22px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.field{display:flex;flex-direction:column;gap:7px}.field label{font-weight:650;font-size:14px}
-input,textarea{width:100%;min-width:0;border:1px solid #d6dfd7;border-radius:12px;background:#fff;padding:12px 13px;font:inherit;color:var(--text);outline:none}
-input:focus,textarea:focus{border-color:#c49b16;box-shadow:0 0 0 3px #f3c54435}
-.full{grid-column:1/-1}
-.actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px;margin-top:20px}
-button{font:inherit;font-weight:700;border-radius:12px;padding:12px 17px;border:1px solid var(--line);background:white;color:var(--text);cursor:pointer}
-button.primary{background:var(--yellow);border-color:var(--yellow);color:#222}button.dark{background:var(--green);border-color:var(--green);color:#fff}
-.note{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.6}
-.history{margin-top:22px}.historybody{padding:0 20px 18px}.empty{padding:22px 0;color:var(--muted)}
-.record{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}.record:last-child{border-bottom:0}
-.record strong{display:block}.record small{color:var(--muted)}.recordactions{display:flex;gap:8px;flex-wrap:wrap}.recordactions button{padding:8px 10px;font-size:13px}
-.status{margin-top:12px;padding:11px 13px;border-radius:10px;background:#eef8ef;color:#205c36;display:none}
-@media(max-width:650px){header{padding:16px}.logo{height:44px;width:44px}.intro{display:block}.intro .hint{display:block;margin-top:8px}.grid{grid-template-columns:1fr}.full{grid-column:auto}form{padding:16px}.cardhead{padding:16px}.record{align-items:flex-start;flex-direction:column}.recordactions{width:100%}.recordactions button{flex:1}}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Tahoma,"Noto Sans Thai",sans-serif;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding:22px 16px 48px}
+h1{font-size:clamp(24px,4vw,34px);margin:0 0 6px;color:var(--navy)}
+.lead{margin:0 0 20px;color:var(--muted)}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin:14px 0}
+h2{font-size:19px;margin:0 0 12px;color:var(--navy)}
+.bill-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+label{display:block;font-size:14px;font-weight:700;margin-bottom:6px}
+input{width:100%;min-width:0;border:1px solid #bdcbd9;border-radius:9px;padding:11px 12px;font:inherit;font-size:16px;background:#fff;color:var(--text)}
+input:focus{outline:3px solid #cfe4f8;border-color:var(--blue)}
+.meter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.meter{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fcfdff}
+.meter h3{margin:0 0 12px;font-size:17px;color:var(--navy)}
+.readings{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.smallnote{font-size:13px;color:var(--muted);margin:8px 0 0}
+.buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+button{border:0;border-radius:10px;padding:12px 16px;font:inherit;font-weight:700;cursor:pointer;min-height:44px}
+.primary{background:var(--blue);color:white}.secondary{background:#e7edf4;color:var(--navy)}.green{background:var(--green);color:white}
+button:focus-visible{outline:3px solid #8fc4f0;outline-offset:2px}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.stat{border-radius:12px;background:#f1f6fb;padding:13px;border:1px solid #dce7f1}
+.stat span{display:block;font-size:13px;color:var(--muted)}.stat strong{font-size:21px;color:var(--navy);overflow-wrap:anywhere}
+.status{margin-top:12px;padding:12px;border-radius:10px;background:#fff7e5;border:1px solid #f0d99d;color:#765313;font-size:14px}
+.status.ok{background:#eaf7ef;border-color:#b7dfc4;color:#155b35}
+.results{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.result{border:1px solid var(--line);border-radius:13px;background:#fff;padding:15px}
+.result h3{margin:0 0 5px;color:var(--navy)}.result .units{color:var(--muted);font-size:14px}.result .amount{font-size:25px;font-weight:800;color:var(--green);margin:8px 0}
+.result button{width:100%;margin-top:6px}
+footer{font-size:13px;color:var(--muted);margin-top:18px}
+@media(max-width:420px){.wrap{padding:14px 10px 32px}.panel{padding:13px}.readings{grid-template-columns:1fr 1fr}}
 </style>
-<meta name="theme-color" content="#173f32">
-
-<link rel="icon"
-      type="image/png"
-      sizes="192x192"
-      href="./icon-192.png">
-
-<link rel="apple-touch-icon"
-      href="./192.png">
-
-<link rel="manifest"
-      href="./manifest.json">
 </head>
 <body>
-<header>
-  <div class="logo">⚡</div>
-  <div><h1>บันทึกเลขมิเตอร์ไฟฟ้า</h1><p>Resort Meter Log · 3 มิเตอร์ · บันทึกเป็นรูปภาพได้</p></div>
-</header>
-<main>
-  <div class="intro">
-    <div><h2>จดเลขมิเตอร์ประจำวัน</h2><p>กรอกเลขตามหน้ามิเตอร์จริง แล้วบันทึกข้อมูลหรือเซฟเป็นรูปภาพเพื่อส่งให้นายจ้าง</p></div>
-    <span class="hint">บันทึกในอุปกรณ์นี้</span>
-  </div>
-  <section class="card">
-    <div class="cardhead"><h3>ข้อมูลการอ่านมิเตอร์</h3><span class="hint">ช่อง * จำเป็นต้องกรอก</span></div>
-    <form id="meterForm">
-      <div class="grid">
-        <div class="field"><label for="readDate">วันที่อ่านมิเตอร์ *</label><input id="readDate" type="date" required></div>
-        <div class="field"><label for="recorder">ผู้บันทึก</label><input id="recorder" placeholder="ชื่อผู้จดมิเตอร์"></div>
-        <div class="field"><label for="name1">มิเตอร์ 1 — ชื่อ/ตำแหน่ง</label><input id="name1" value="มิเตอร์ 1"></div>
-        <div class="field"><label for="value1">เลขอ่านมิเตอร์ 1 *</label><input id="value1" inputmode="decimal" placeholder="เช่น 12345.6" required></div>
-        <div class="field"><label for="name2">มิเตอร์ 2 — ชื่อ/ตำแหน่ง</label><input id="name2" value="มิเตอร์ 2"></div>
-        <div class="field"><label for="value2">เลขอ่านมิเตอร์ 2 *</label><input id="value2" inputmode="decimal" placeholder="เช่น 23456.7" required></div>
-        <div class="field"><label for="name3">มิเตอร์ 3 — ชื่อ/ตำแหน่ง</label><input id="name3" value="มิเตอร์ 3"></div>
-        <div class="field"><label for="value3">เลขอ่านมิเตอร์ 3 *</label><input id="value3" inputmode="decimal" placeholder="เช่น 34567.8" required></div>
-        <div class="field full"><label for="notes">หมายเหตุ</label><textarea id="notes" rows="2" placeholder="เช่น ถ่ายรูปมิเตอร์แล้ว / มิเตอร์บ้านพักด้านหลัง"></textarea></div>
-      </div>
-      <div class="actions">
-        <button type="reset">ล้างช่องกรอก</button>
-        <button type="button" class="dark" id="saveRecord">💾 บันทึกข้อมูล</button>
-        <button type="button" class="primary" id="saveImage">🖼️ เซฟเป็นรูปภาพ</button>
-      </div>
-      <div class="status" id="status"></div>
-      <p class="note">ข้อมูลประวัติเก็บในเบราว์เซอร์เครื่องนี้เท่านั้น ควรเซฟรูปภาพและสำรองข้อมูลเป็นระยะ การเซฟรูปจะได้ไฟล์ PNG พร้อมวันที่และเลขมิเตอร์ทั้ง 3 หม้อ</p>
-    </form>
+<div class="wrap">
+  <h1>คำนวณค่าไฟฟ้า 6 มิเตอร์</h1>
+  <p class="lead">กรอกยอดบิล PEA และเลขมิเตอร์แต่ละบ้าน ระบบจะคำนวณค่าไฟตามสัดส่วนหน่วยที่ใช้ พร้อมสร้างรูปภาพแยกบ้านสำหรับส่งทางแชต</p>
+
+  <section class="panel">
+    <h2>1. ข้อมูลจากบิล PEA</h2>
+    <div class="bill-grid">
+      <div><label for="billTotal">ยอดเงินบิลรวม (บาท)</label><input id="billTotal" type="number" min="0" step="0.01" value="27245.74"></div>
+      <div><label for="peaUnits">หน่วยจากมิเตอร์หลัก PEA</label><input id="peaUnits" type="number" min="0" step="1" value="3656"></div>
+      <div><label for="billPeriod">รอบบิล / เดือน</label><input id="billPeriod" type="text" placeholder="เช่น พ.ย. 2569"></div>
+    </div>
+    <p class="smallnote">ยอดเงินตัวอย่างจากบิลล่าสุดที่คุณส่งมา คุณสามารถแก้ไขเป็นยอดบิลรอบใหม่ได้</p>
   </section>
-  <section class="card history">
-    <div class="cardhead"><h3>ประวัติการบันทึก</h3><button id="exportJson">สำรองข้อมูล JSON</button></div>
-    <div class="historybody" id="historyList"><div class="empty">ยังไม่มีประวัติที่บันทึกไว้</div></div>
+
+  <section class="panel">
+    <h2>2. กรอกเลขมิเตอร์แต่ละบ้าน</h2>
+    <div id="meterInputs" class="meter-grid"></div>
+    <div class="buttons">
+      <button class="primary" id="calculateBtn" type="button">คำนวณค่าไฟ</button>
+      <button class="secondary" id="resetBtn" type="button">คืนค่าเลขครั้งก่อน</button>
+    </div>
+    <p class="smallnote">เลขครั้งก่อนตั้งต้นจากรอบล่าสุดที่คุณให้ไว้ หากใช้แอปในเครื่องเดิม สามารถบันทึกเลขครั้งปัจจุบันเป็นเลขครั้งก่อนสำหรับรอบถัดไปได้</p>
   </section>
-</main>
+
+  <section class="panel">
+    <h2>3. สรุปการคำนวณ</h2>
+    <div id="summary" class="summary">
+      <div class="stat"><span>หน่วยรวม 6 มิเตอร์</span><strong>—</strong></div>
+      <div class="stat"><span>ส่วนต่างเทียบ PEA</span><strong>—</strong></div>
+      <div class="stat"><span>อัตราเฉลี่ยจัดสรร</span><strong>—</strong></div>
+      <div class="stat"><span>ยอดจัดสรรรวม</span><strong>—</strong></div>
+    </div>
+    <div id="status" class="status" aria-live="polite">กรอกเลขมิเตอร์ปัจจุบันให้ครบทั้ง 6 บ้าน แล้วกด “คำนวณค่าไฟ”</div>
+  </section>
+
+  <section class="panel">
+    <h2>4. รูปแจ้งค่าไฟสำหรับแต่ละบ้าน</h2>
+    <p class="smallnote">กดปุ่ม “ดาวน์โหลดรูปภาพ” ใต้บ้านที่ต้องการ ระบบจะบันทึกรูป PNG ให้ส่งต่อได้ทันที</p>
+    <div id="results" class="results"></div>
+    <div class="buttons">
+      <button class="green" id="downloadAllBtn" type="button">ดาวน์โหลดรูปภาพทั้ง 6 บ้าน</button>
+      <button class="secondary" id="saveReadingsBtn" type="button">บันทึกเลขปัจจุบันเป็นเลขครั้งก่อน (รอบถัดไป)</button>
+    </div>
+    <p class="smallnote">การดาวน์โหลดรูปทั้ง 6 ใบจะเริ่มดาวน์โหลดทีละไฟล์ เบราว์เซอร์บางตัวอาจถามอนุญาตให้ดาวน์โหลดหลายไฟล์</p>
+  </section>
+
+  <footer>
+    วิธีคิด: ค่าไฟเฉลี่ยจัดสรร = ยอดบิล PEA ÷ หน่วยรวมมิเตอร์ย่อย 6 ตัว; ค่าไฟแต่ละบ้าน = หน่วยที่ใช้ × ค่าเฉลี่ยจัดสรร.
+    ส่วนต่างระหว่างมิเตอร์หลักกับมิเตอร์ย่อยถูกกระจายตามสัดส่วนการใช้ไฟโดยอ้อม ไม่ใช่อัตราค่าไฟ PEA โดยตรง ควรตรวจสอบส่วนต่างและตกลงหลักเกณฑ์กับทุกบ้านก่อนเรียกเก็บเงินจริง.
+  </footer>
+</div>
+
 <script>
-const $=id=>document.getElementById(id);
-const KEY='resort_meter_records_v1';
-const fields=['readDate','recorder','name1','value1','name2','value2','name3','value3','notes'];
-const today=new Date(); $('readDate').value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-function getRecords(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
-function readForm(){const d={};fields.forEach(k=>d[k]=$(k).value.trim());if(!d.readDate||!d.value1||!d.value2||!d.value3)throw Error('กรุณากรอกวันที่และเลขมิเตอร์ทั้ง 3 หม้อ');for(const k of ['value1','value2','value3'])if(!Number.isFinite(Number(d[k]))||Number(d[k])<0)throw Error('เลขมิเตอร์ต้องเป็นตัวเลขตั้งแต่ 0 ขึ้นไป');return d}
-function toast(msg){const s=$('status');s.textContent=msg;s.style.display='block';setTimeout(()=>s.style.display='none',4000)}
-function persist(records){localStorage.setItem(KEY,JSON.stringify(records))}
-function saveRecord(){try{const d=readForm();const records=getRecords();records.unshift({...d,id:Date.now()});persist(records);renderHistory();toast('บันทึกข้อมูลเรียบร้อยแล้ว')}catch(e){alert(e.message||'บันทึกไม่สำเร็จ เบราว์เซอร์อาจไม่อนุญาตให้บันทึกข้อมูล')}}
-function dateThai(s){if(!s)return '';const [y,m,d]=s.split('-').map(Number);return `${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}/${y+543}`}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function renderHistory(){const rs=getRecords();const box=$('historyList');if(!rs.length){box.innerHTML='<div class="empty">ยังไม่มีประวัติที่บันทึกไว้</div>';return}box.innerHTML=rs.map(r=>`<div class="record"><div><strong>${esc(dateThai(r.readDate))} · ${esc(r.recorder||'ไม่ระบุผู้บันทึก')}</strong><small>${esc(r.name1)}: ${esc(r.value1)} &nbsp;|&nbsp; ${esc(r.name2)}: ${esc(r.value2)} &nbsp;|&nbsp; ${esc(r.name3)}: ${esc(r.value3)}</small></div><div class="recordactions"><button data-image="${r.id}">เซฟรูปภาพ</button><button data-load="${r.id}">เปิดข้อมูล</button><button data-delete="${r.id}">ลบ</button></div></div>`).join('');box.querySelectorAll('[data-image]').forEach(b=>b.onclick=()=>{const r=rs.find(x=>x.id==b.dataset.image);if(r)downloadImage(r)});box.querySelectorAll('[data-load]').forEach(b=>b.onclick=()=>{const r=rs.find(x=>x.id==b.dataset.load);if(r){fields.forEach(k=>$(k).value=r[k]||'');window.scrollTo({top:0,behavior:'smooth'});toast('โหลดข้อมูลเดิมแล้ว')}});box.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>{if(confirm('ต้องการลบรายการนี้ใช่หรือไม่?')){persist(getRecords().filter(x=>x.id!=b.dataset.delete));renderHistory()}})}
-function downloadImage(d){const canvas=document.createElement('canvas');canvas.width=1200;canvas.height=800;const ctx=canvas.getContext('2d');ctx.fillStyle='#f5f6f1';ctx.fillRect(0,0,1200,800);ctx.fillStyle='#173f32';ctx.fillRect(0,0,1200,130);ctx.fillStyle='#f3c544';ctx.fillRect(45,35,62,62);ctx.fillStyle='#173f32';ctx.font='bold 42px sans-serif';ctx.fillText('⚡',57,82);ctx.fillStyle='#fff';ctx.font='bold 34px sans-serif';ctx.fillText('บันทึกเลขมิเตอร์ไฟฟ้า',130,68);ctx.font='22px sans-serif';ctx.fillText('Resort Meter Log',130,102);ctx.fillStyle='#1d2924';ctx.font='26px sans-serif';ctx.fillText('วันที่อ่านมิเตอร์: '+dateThai(d.readDate),55,185);ctx.fillText('ผู้บันทึก: '+(d.recorder||'-'),650,185);const rows=[[d.name1,d.value1],[d.name2,d.value2],[d.name3,d.value3]];let y=240;rows.forEach((r,i)=>{ctx.fillStyle='#fff';roundRect(ctx,50,y,1100,110,18);ctx.fill();ctx.strokeStyle='#dfe5df';ctx.stroke();ctx.fillStyle='#68766f';ctx.font='22px sans-serif';ctx.fillText('มิเตอร์ '+(i+1),80,y+38);ctx.fillStyle='#1d2924';ctx.font='bold 30px sans-serif';ctx.fillText(r[0]||('มิเตอร์ '+(i+1)),80,y+78);ctx.fillStyle='#173f32';ctx.font='bold 38px sans-serif';ctx.textAlign='right';ctx.fillText(String(r[1]),1100,y+68);ctx.textAlign='left';y+=130});ctx.fillStyle='#68766f';ctx.font='22px sans-serif';ctx.fillText('หมายเหตุ: '+(d.notes||'-'),55,660);ctx.fillText('สร้างจาก Resort Meter Log',55,735);ctx.fillText('วันที่บันทึก '+new Date().toLocaleString('th-TH'),55,770);canvas.toBlob(blob=>{if(!blob){alert('สร้างรูปภาพไม่สำเร็จ');return}const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='meter-reading-'+d.readDate+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)},'image/png')}
-function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
-$('saveRecord').onclick=saveRecord;
-$('saveImage').onclick=()=>{try{const d=readForm();downloadImage(d);toast('กำลังดาวน์โหลดรูปภาพ PNG')}catch(e){alert(e.message)}};
-$('meterForm').addEventListener('reset',()=>setTimeout(()=>{$('readDate').value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`},0));
-$('exportJson').onclick=()=>{const blob=new Blob([JSON.stringify(getRecords(),null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='resort-meter-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)};
-renderHistory();
+(function(){
+const meters = [
+ {name:"ไฟฟ้า (ปริม 3P)", prev:11024, curr:11366},
+ {name:"ไฟฟ้า (ปีเตอร์ 3P)", prev:87614, curr:88184},
+ {name:"ปั๊มน้ำ (ปีเตอร์)", prev:24381, curr:24456},
+ {name:"ไฟฟ้า (โจ้ 3P)", prev:10799, curr:12494},
+ {name:"ไฟฟ้า (ชีร่า)", prev:53808, curr:53855},
+ {name:"รีสอร์ท 3P", prev:5663, curr:6169}
+];
+const $ = id => document.getElementById(id);
+const fmt = n => Number(n).toLocaleString("th-TH",{minimumFractionDigits:0,maximumFractionDigits:2});
+const money = n => Number(n).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2});
+let latestResults = null;
+
+function makeInputs(){
+ const host=$("meterInputs"); host.innerHTML="";
+ meters.forEach((m,i)=>{
+   const card=document.createElement("div"); card.className="meter";
+   card.innerHTML=`<h3>${i+1}. ${m.name}</h3><div class="readings">
+   <div><label for="prev${i}">เลขครั้งก่อน</label><input id="prev${i}" type="number" min="0" step="1" value="${m.prev}"></div>
+   <div><label for="curr${i}">เลขครั้งนี้</label><input id="curr${i}" type="number" min="0" step="1" placeholder="กรอกเลขมิเตอร์"></div>
+   </div><p class="smallnote" id="unit${i}">หน่วยที่ใช้: —</p>`;
+   host.appendChild(card);
+ });
+}
+function calculate(){
+ const bill=Number($("billTotal").value);
+ const peaUnits=Number($("peaUnits").value);
+ if(!Number.isFinite(bill)||bill<=0){showError("กรุณากรอกยอดบิล PEA ให้มากกว่า 0 บาท");return false;}
+ if(!Number.isFinite(peaUnits)||peaUnits<0){showError("กรุณากรอกหน่วยจากมิเตอร์หลัก PEA ให้ถูกต้อง");return false;}
+ const rows=[];
+ for(let i=0;i<meters.length;i++){
+   const prev=Number($("prev"+i).value), curr=Number($("curr"+i).value);
+   if($("curr"+i).value.trim()===""||!Number.isFinite(prev)||!Number.isFinite(curr)||prev<0||curr<prev||!Number.isInteger(prev)||!Number.isInteger(curr)){
+     showError(`กรุณาตรวจสอบเลขมิเตอร์ของ ${meters[i].name} เลขครั้งนี้ต้องกรอกครบและไม่ต่ำกว่าเลขครั้งก่อน`);return false;
+   }
+   rows.push({name:meters[i].name,prev,curr,units:curr-prev,index:i});
+ }
+ const totalUnits=rows.reduce((s,r)=>s+r.units,0);
+ if(totalUnits<=0){showError("หน่วยรวมมิเตอร์ย่อยต้องมากกว่า 0 จึงจะคำนวณได้");return false;}
+ const rate=bill/totalUnits;
+ rows.forEach(r=>r.amount=Math.round(r.units*rate*100)/100);
+ // Keep total allocated amount equal to the bill after rounding to satang.
+ const sum=rows.reduce((s,r)=>s+r.amount,0);
+ rows[rows.length-1].amount=Math.round((rows[rows.length-1].amount+(Math.round(bill*100)-Math.round(sum*100))/100)*100)/100;
+ rows.forEach(r=>r.shareUnits=totalUnits?peaUnits>0? r.units/totalUnits*(peaUnits-totalUnits):0:0);
+ latestResults={bill,peaUnits,totalUnits,difference:peaUnits-totalUnits,rate,rows,period:$("billPeriod").value.trim()};
+ renderSummary(latestResults); renderResults(latestResults);
+ return true;
+}
+function showError(msg){$("status").className="status";$("status").textContent=msg;}
+function renderSummary(d){
+ $("summary").innerHTML=`
+ <div class="stat"><span>หน่วยรวม 6 มิเตอร์</span><strong>${fmt(d.totalUnits)} หน่วย</strong></div>
+ <div class="stat"><span>ส่วนต่างเทียบ PEA</span><strong>${fmt(d.difference)} หน่วย</strong></div>
+ <div class="stat"><span>อัตราเฉลี่ยจัดสรร</span><strong>${d.rate.toFixed(5)} บาท/หน่วย</strong></div>
+ <div class="stat"><span>ยอดจัดสรรรวม</span><strong>${money(d.rows.reduce((s,r)=>s+r.amount,0))} บาท</strong></div>`;
+ const status=$("status"); status.className="status ok";
+ status.textContent=`คำนวณแล้ว: หน่วยรวมมิเตอร์ย่อย ${fmt(d.totalUnits)} หน่วย เทียบกับ PEA ${fmt(d.peaUnits)} หน่วย มีส่วนต่าง ${fmt(d.difference)} หน่วย ยอดจัดสรรรวม ${money(d.rows.reduce((s,r)=>s+r.amount,0))} บาท`;
+ d.rows.forEach(r=>{const el=$("unit"+r.index);if(el)el.textContent=`หน่วยที่ใช้: ${fmt(r.units)} หน่วย`;});
+}
+function renderResults(d){
+ const host=$("results");host.innerHTML="";
+ d.rows.forEach(r=>{
+  const card=document.createElement("div");card.className="result";
+  card.innerHTML=`<h3>${r.name}</h3><div class="units">${fmt(r.prev)} → ${fmt(r.curr)} • ใช้ ${fmt(r.units)} หน่วย</div><div class="amount">${money(r.amount)} บาท</div><button type="button" class="primary">ดาวน์โหลดรูปภาพ</button>`;
+  card.querySelector("button").addEventListener("click",()=>downloadImage(r,d));
+  host.appendChild(card);
+ });
+}
+function wrapText(ctx,text,x,y,maxWidth,lineHeight){
+ const words=String(text).split(" ");let line="";
+ for(const word of words){const test=line?line+" "+word:word;if(ctx.measureText(test).width>maxWidth&&line){ctx.fillText(line,x,y);line=word;y+=lineHeight;}else line=test;}
+ if(line)ctx.fillText(line,x,y);return y+lineHeight;
+}
+function downloadImage(r,d){
+ const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=1350;
+ const ctx=canvas.getContext("2d");
+ ctx.fillStyle="#f2f6fb";ctx.fillRect(0,0,1080,1350);
+ ctx.fillStyle="#ffffff";roundRect(ctx,35,35,1010,1280,28,true,false);
+ ctx.fillStyle="#17365d";roundRect(ctx,35,35,1010,175,28,true,false);ctx.fillRect(35,170,1010,40);
+ ctx.textAlign="center";ctx.fillStyle="#ffffff";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText("ใบแจ้งค่าไฟฟ้า",540,88);
+ ctx.font="bold 36px Tahoma, sans-serif";ctx.fillText(r.name,540,145);
+ ctx.textAlign="left";ctx.fillStyle="#27384a";ctx.font="26px Tahoma, sans-serif";
+ ctx.fillText("เลขมิเตอร์ครั้งก่อน",85,270);ctx.textAlign="right";ctx.font="bold 29px Tahoma, sans-serif";ctx.fillText(fmt(r.prev),985,270);
+ ctx.textAlign="left";ctx.font="26px Tahoma, sans-serif";ctx.fillText("เลขมิเตอร์ครั้งนี้",85,335);ctx.textAlign="right";ctx.font="bold 29px Tahoma, sans-serif";ctx.fillText(fmt(r.curr),985,335);
+ ctx.textAlign="left";ctx.fillStyle="#eaf2fa";roundRect(ctx,70,375,940,95,16,true,false);
+ ctx.fillStyle="#27384a";ctx.font="27px Tahoma, sans-serif";ctx.fillText("หน่วยไฟฟ้าที่ใช้",95,432);
+ ctx.textAlign="right";ctx.fillStyle="#176b45";ctx.font="bold 31px Tahoma, sans-serif";ctx.fillText(fmt(r.units)+" หน่วย",985,432);
+ ctx.textAlign="left";ctx.fillStyle="#17365d";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText("วิธีคำนวณ",85,535);
+ ctx.fillStyle="#27384a";ctx.font="25px Tahoma, sans-serif";ctx.fillText(`${fmt(r.curr)} − ${fmt(r.prev)} = ${fmt(r.units)} หน่วย`,85,585);
+ ctx.font="23px Tahoma, sans-serif";ctx.fillText("อัตราเฉลี่ยจัดสรร = ยอดบิล PEA ÷ หน่วยรวมมิเตอร์ย่อย",85,640);
+ ctx.fillText(`${money(d.bill)} ÷ ${fmt(d.totalUnits)} = ${d.rate.toFixed(5)} บาท/หน่วย`,85,682);
+ ctx.fillText(`ค่าไฟ = ${fmt(r.units)} × ${d.rate.toFixed(5)}`,85,724);
+ ctx.fillStyle="#fff0f0";roundRect(ctx,70,770,940,155,20,true,false);ctx.strokeStyle="#df7777";ctx.lineWidth=2;roundRect(ctx,70,770,940,155,20,false,true);
+ ctx.textAlign="center";ctx.fillStyle="#a72c2c";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText("ยอดที่ต้องชำระ",540,820);
+ ctx.font="bold 54px Tahoma, sans-serif";ctx.fillText(money(r.amount)+" บาท",540,885);
+ ctx.textAlign="left";ctx.fillStyle="#17365d";ctx.font="bold 22px Tahoma, sans-serif";ctx.fillText("ข้อมูลอ้างอิง",85,980);
+ ctx.fillStyle="#27384a";ctx.font="21px Tahoma, sans-serif";ctx.fillText(`ยอดบิล PEA: ${money(d.bill)} บาท`,85,1025);
+ ctx.fillText(`หน่วย PEA: ${fmt(d.peaUnits)} | รวมมิเตอร์ย่อย: ${fmt(d.totalUnits)} หน่วย`,85,1065);
+ ctx.fillStyle="#9a5b00";ctx.fillText(`ส่วนต่าง: ${fmt(d.difference)} หน่วย (กระจายตามสัดส่วนการใช้ไฟ)`,85,1105);
+ ctx.fillStyle="#687789";ctx.font="18px Tahoma, sans-serif";
+ let y=1155;y=wrapText(ctx,"หมายเหตุ: ยอดนี้ใช้จัดสรรค่าใช้จ่ายรวมตามสัดส่วนหน่วยของมิเตอร์ย่อย ไม่ใช่อัตราค่าไฟ PEA โดยตรง ควรตรวจสอบส่วนต่างและตกลงหลักเกณฑ์กับทุกบ้านก่อนเรียกเก็บเงินจริง",85,y,900,27);
+ if(d.period){ctx.fillText("รอบบิล: "+d.period,85,1265);}
+ const a=document.createElement("a");a.download=`ค่าไฟ_${r.name.replace(/[() ]/g,"_")}.png`;a.href=canvas.toDataURL("image/png");a.click();
+}
+function roundRect(ctx,x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();if(fill)ctx.fill();if(stroke)ctx.stroke();}
+$("calculateBtn").addEventListener("click",calculate);
+$("resetBtn").addEventListener("click",()=>{
+ meters.forEach((m,i)=>{$("prev"+i).value=m.prev;$("curr"+i).value="";$("unit"+i).textContent="หน่วยที่ใช้: —";});
+ $("results").innerHTML="";$("summary").innerHTML='<div class="stat"><span>หน่วยรวม 6 มิเตอร์</span><strong>—</strong></div><div class="stat"><span>ส่วนต่างเทียบ PEA</span><strong>—</strong></div><div class="stat"><span>อัตราเฉลี่ยจัดสรร</span><strong>—</strong></div><div class="stat"><span>ยอดจัดสรรรวม</span><strong>—</strong></div>';
+ $("status").className="status";$("status").textContent="คืนค่าเลขครั้งก่อนตั้งต้นแล้ว กรุณากรอกเลขมิเตอร์ครั้งปัจจุบัน";
+ latestResults=null;
+});
+$("downloadAllBtn").addEventListener("click",()=>{
+ if(!latestResults){showError("กรุณากดคำนวณค่าไฟก่อนดาวน์โหลดรูปภาพ");return;}
+ latestResults.rows.forEach((r,i)=>setTimeout(()=>downloadImage(r,latestResults),i*350));
+});
+$("saveReadingsBtn").addEventListener("click",()=>{
+ if(!latestResults){showError("กรุณาคำนวณก่อนบันทึกเลขมิเตอร์");return;}
+ latestResults.rows.forEach((r,i)=>{meters[i].prev=r.curr;});
+ // This browser app uses local storage to remember the new baseline on this device.
+ try{localStorage.setItem("electricitySixMetersPrevious",JSON.stringify(meters.map(m=>m.prev)));}catch(e){}
+ alert("บันทึกเลขมิเตอร์ปัจจุบันเป็นเลขครั้งก่อนสำหรับรอบถัดไปแล้วบนอุปกรณ์นี้");
+});
+try{
+ const saved=JSON.parse(localStorage.getItem("electricitySixMetersPrevious")||"null");
+ if(Array.isArray(saved)&&saved.length===6)saved.forEach((v,i)=>{if(Number.isInteger(v)&&v>=0)meters[i].prev=v;});
+}catch(e){}
+makeInputs();
+})();
 </script>
 </body>
 </html>
