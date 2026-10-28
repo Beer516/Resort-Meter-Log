@@ -25,7 +25,7 @@ input:focus{outline:3px solid #cfe4f8;border-color:var(--blue)}
 .meter h3{margin:0 0 12px;font-size:17px;color:var(--navy)}
 .readings{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .smallnote{font-size:13px;color:var(--muted);margin:8px 0 0}
-.buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.topbar{display:flex;justify-content:flex-end;margin-bottom:10px}.lang-toggle{background:#e7edf4;color:var(--navy);border:1px solid var(--line);padding:8px 13px;min-height:38px}.buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
 button{border:0;border-radius:10px;padding:12px 16px;font:inherit;font-weight:700;cursor:pointer;min-height:44px}
 .primary{background:var(--blue);color:white}.secondary{background:#e7edf4;color:var(--navy)}.green{background:var(--green);color:white}
 button:focus-visible{outline:3px solid #8fc4f0;outline-offset:2px}
@@ -44,54 +44,54 @@ footer{font-size:13px;color:var(--muted);margin-top:18px}
 </head>
 <body>
 <div class="wrap">
-  <h1>คำนวณค่าไฟฟ้า เขาใหญ่</h1>
-  <p class="lead">กรอกยอดบิล PEA และเลขมิเตอร์แต่ละบ้าน ระบบจะคำนวณค่าไฟตามสัดส่วนหน่วยที่ใช้ พร้อมสร้างรูปภาพแยกบ้านสำหรับส่งทางแชต</p>
+  <div class="topbar"><button class="lang-toggle" id="languageBtn" type="button" aria-label="Switch language">English</button></div>
+  <h1 data-i18n="title">คำนวณค่าไฟฟ้า เขาใหญ่</h1>
+  <p class="lead" data-i18n="lead">กรอกยอดบิล PEA และเลขมิเตอร์แต่ละบ้าน ระบบจะคำนวณค่าไฟตามสัดส่วนหน่วยที่ใช้ พร้อมสร้างรูปภาพแยกบ้านสำหรับส่งทางแชต</p>
 
   <section class="panel">
-    <h2>1. ข้อมูลจากบิล PEA</h2>
+    <h2 data-i18n="billHeading">1. ข้อมูลจากบิล PEA</h2>
     <div class="bill-grid">
-      <div><label for="billTotal">ยอดเงินบิลรวม (บาท)</label><input id="billTotal" type="number" min="0" step="0.01" value="27245.74"></div>
-      <div><label for="peaUnits">หน่วยจากมิเตอร์หลัก PEA</label><input id="peaUnits" type="number" min="0" step="1" value="3656"></div>
-      <div><label for="billPeriod">รอบบิล / เดือน</label><input id="billPeriod" type="text" placeholder="เช่น พ.ย. 2569"></div>
+      <div><label for="billTotal" data-i18n="billTotal">ยอดเงินบิลรวม (บาท)</label><input id="billTotal" type="number" min="0" step="0.01" value="27245.74"></div>
+      <div><label for="peaUnits" data-i18n="peaUnits">หน่วยจากมิเตอร์หลัก PEA</label><input id="peaUnits" type="number" min="0" step="1" value="3656"></div>
+      <div><label for="billPeriod" data-i18n="billPeriod">รอบบิล / เดือน</label><input id="billPeriod" type="text" placeholder="เช่น พ.ย. 2569" data-i18n-placeholder="periodPlaceholder"></div>
     </div>
-    <p class="smallnote">ยอดเงินตัวอย่างจากบิลล่าสุดที่คุณส่งมา คุณสามารถแก้ไขเป็นยอดบิลรอบใหม่ได้</p>
+    <p class="smallnote" data-i18n="billNote">ยอดเงินตัวอย่างจากบิลล่าสุดที่คุณส่งมา คุณสามารถแก้ไขเป็นยอดบิลรอบใหม่ได้</p>
   </section>
 
   <section class="panel">
-    <h2>2. กรอกเลขมิเตอร์แต่ละบ้าน</h2>
+    <h2 data-i18n="metersHeading">2. กรอกเลขมิเตอร์แต่ละบ้าน</h2>
     <div id="meterInputs" class="meter-grid"></div>
     <div class="buttons">
-      <button class="primary" id="calculateBtn" type="button">คำนวณค่าไฟ</button>
-      <button class="secondary" id="resetBtn" type="button">คืนค่าเลขครั้งก่อน</button>
+      <button class="primary" id="calculateBtn" type="button" data-i18n="calculate">คำนวณค่าไฟ</button>
+      <button class="secondary" id="resetBtn" type="button" data-i18n="reset">คืนค่าเลขครั้งก่อน</button>
     </div>
-    <p class="smallnote">เลขครั้งก่อนตั้งต้นจากรอบล่าสุดที่คุณให้ไว้ หากใช้แอปในเครื่องเดิม สามารถบันทึกเลขครั้งปัจจุบันเป็นเลขครั้งก่อนสำหรับรอบถัดไปได้</p>
+    <p class="smallnote" data-i18n="meterNote">เลขครั้งก่อนตั้งต้นจากรอบล่าสุดที่คุณให้ไว้ หากใช้แอปในเครื่องเดิม สามารถบันทึกเลขครั้งปัจจุบันเป็นเลขครั้งก่อนสำหรับรอบถัดไปได้</p>
   </section>
 
   <section class="panel">
-    <h2>3. สรุปการคำนวณ</h2>
+    <h2 data-i18n="summaryHeading">3. สรุปการคำนวณ</h2>
     <div id="summary" class="summary">
-      <div class="stat"><span>หน่วยรวม 6 มิเตอร์</span><strong>—</strong></div>
-      <div class="stat"><span>ส่วนต่างเทียบ PEA</span><strong>—</strong></div>
-      <div class="stat"><span>อัตราเฉลี่ยจัดสรร</span><strong>—</strong></div>
-      <div class="stat"><span>ยอดจัดสรรรวม</span><strong>—</strong></div>
+      <div class="stat"><span data-i18n="totalUnits">หน่วยรวม 6 มิเตอร์</span><strong>—</strong></div>
+      <div class="stat"><span data-i18n="difference">ส่วนต่างเทียบ PEA</span><strong>—</strong></div>
+      <div class="stat"><span data-i18n="rate">อัตราเฉลี่ยจัดสรร</span><strong>—</strong></div>
+      <div class="stat"><span data-i18n="allocatedTotal">ยอดจัดสรรรวม</span><strong>—</strong></div>
     </div>
-    <div id="status" class="status" aria-live="polite">กรอกเลขมิเตอร์ปัจจุบันให้ครบทั้ง 6 บ้าน แล้วกด “คำนวณค่าไฟ”</div>
+    <div id="status" class="status" aria-live="polite" data-i18n="initialStatus">กรอกเลขมิเตอร์ปัจจุบันให้ครบทั้ง 6 บ้าน แล้วกด “คำนวณค่าไฟ”</div>
   </section>
 
   <section class="panel">
-    <h2>4. รูปแจ้งค่าไฟสำหรับแต่ละบ้าน</h2>
-    <p class="smallnote">กดปุ่ม “ดาวน์โหลดรูปภาพ” ใต้บ้านที่ต้องการ ระบบจะบันทึกรูป PNG ให้ส่งต่อได้ทันที</p>
+    <h2 data-i18n="imagesHeading">4. รูปแจ้งค่าไฟสำหรับแต่ละบ้าน</h2>
+    <p class="smallnote" data-i18n="imageNote">กดปุ่ม “ดาวน์โหลดรูปภาพ” ใต้บ้านที่ต้องการ ระบบจะบันทึกรูป PNG ให้ส่งต่อได้ทันที</p>
     <div id="results" class="results"></div>
     <div class="buttons">
-      <button class="green" id="downloadAllBtn" type="button">ดาวน์โหลดรูปภาพทั้ง 6 บ้าน</button>
-      <button class="secondary" id="saveReadingsBtn" type="button">บันทึกเลขปัจจุบันเป็นเลขครั้งก่อน (รอบถัดไป)</button>
+      <button class="green" id="downloadAllBtn" type="button" data-i18n="downloadAll">ดาวน์โหลดรูปภาพทั้ง 6 บ้าน</button>
+      <button class="secondary" id="saveReadingsBtn" type="button" data-i18n="saveReadings">บันทึกเลขปัจจุบันเป็นเลขครั้งก่อน (รอบถัดไป)</button>
     </div>
-    <p class="smallnote">การดาวน์โหลดรูปทั้ง 6 ใบจะเริ่มดาวน์โหลดทีละไฟล์ เบราว์เซอร์บางตัวอาจถามอนุญาตให้ดาวน์โหลดหลายไฟล์</p>
+    <p class="smallnote" data-i18n="downloadNote">การดาวน์โหลดรูปทั้ง 6 ใบจะเริ่มดาวน์โหลดทีละไฟล์ เบราว์เซอร์บางตัวอาจถามอนุญาตให้ดาวน์โหลดหลายไฟล์</p>
   </section>
 
   <footer>
-    วิธีคิด: ค่าไฟเฉลี่ยจัดสรร = ยอดบิล PEA ÷ หน่วยรวมมิเตอร์ย่อย 6 ตัว; ค่าไฟแต่ละบ้าน = หน่วยที่ใช้ × ค่าเฉลี่ยจัดสรร.
-    ส่วนต่างระหว่างมิเตอร์หลักกับมิเตอร์ย่อยถูกกระจายตามสัดส่วนการใช้ไฟโดยอ้อม ไม่ใช่อัตราค่าไฟ PEA โดยตรง ควรตรวจสอบส่วนต่างและตกลงหลักเกณฑ์กับทุกบ้านก่อนเรียกเก็บเงินจริง.
+    <span data-i18n="footerNote">วิธีคิด: ค่าไฟเฉลี่ยจัดสรร = ยอดบิล PEA ÷ หน่วยรวมมิเตอร์ย่อย 6 ตัว; ค่าไฟแต่ละบ้าน = หน่วยที่ใช้ × ค่าเฉลี่ยจัดสรร. ส่วนต่างระหว่างมิเตอร์หลักกับมิเตอร์ย่อยถูกกระจายตามสัดส่วนการใช้ไฟโดยอ้อม ไม่ใช่อัตราค่าไฟ PEA โดยตรง ควรตรวจสอบส่วนต่างและตกลงหลักเกณฑ์กับทุกบ้านก่อนเรียกเก็บเงินจริง.</span>
   </footer>
 </div>
 
@@ -105,37 +105,85 @@ const meters = [
  {name:"ไฟฟ้า (ชีร่า)", prev:53808, curr:53855},
  {name:"รีสอร์ท 3P", prev:5663, curr:6169}
 ];
+const meterNamesEn=["Electricity (Parim 3P)","Electricity (Peter 3P)","Water Pump (Peter)","Electricity (Joe 3P)","Electricity (Shira)","Resort 3P"];
+const meterName=(i)=>currentLang==="en"?meterNamesEn[i]:meters[i].name;
 const $ = id => document.getElementById(id);
 const fmt = n => Number(n).toLocaleString("th-TH",{minimumFractionDigits:0,maximumFractionDigits:2});
 const money = n => Number(n).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2});
 let latestResults = null;
 
+let currentLang = localStorage.getItem("electricityLanguage") || "th";
+const translations = {
+ th: {
+  title:"คำนวณค่าไฟฟ้า เขาใหญ่", lead:"กรอกยอดบิล PEA และเลขมิเตอร์แต่ละบ้าน ระบบจะคำนวณค่าไฟตามสัดส่วนหน่วยที่ใช้ พร้อมสร้างรูปภาพแยกบ้านสำหรับส่งทางแชต",
+  billHeading:"1. ข้อมูลจากบิล PEA", billTotal:"ยอดเงินบิลรวม (บาท)", peaUnits:"หน่วยจากมิเตอร์หลัก PEA", billPeriod:"รอบบิล / เดือน", periodPlaceholder:"เช่น พ.ย. 2569", billNote:"ยอดเงินตัวอย่างจากบิลล่าสุดที่คุณส่งมา คุณสามารถแก้ไขเป็นยอดบิลรอบใหม่ได้",
+  metersHeading:"2. กรอกเลขมิเตอร์แต่ละบ้าน", calculate:"คำนวณค่าไฟ", reset:"คืนค่าเลขครั้งก่อน", meterNote:"เลขครั้งก่อนตั้งต้นจากรอบล่าสุดที่คุณให้ไว้ หากใช้แอปในเครื่องเดิม สามารถบันทึกเลขครั้งปัจจุบันเป็นเลขครั้งก่อนสำหรับรอบถัดไปได้",
+  summaryHeading:"3. สรุปการคำนวณ", totalUnits:"หน่วยรวม 6 มิเตอร์", difference:"ส่วนต่างเทียบ PEA", rate:"อัตราเฉลี่ยจัดสรร", allocatedTotal:"ยอดจัดสรรรวม", initialStatus:"กรอกเลขมิเตอร์ปัจจุบันให้ครบทั้ง 6 บ้าน แล้วกด “คำนวณค่าไฟ”",
+  imagesHeading:"4. รูปแจ้งค่าไฟสำหรับแต่ละบ้าน", imageNote:"กดปุ่ม “ดาวน์โหลดรูปภาพ” ใต้บ้านที่ต้องการ ระบบจะสร้างรูป PNG เพื่อบันทึกหรือส่งต่อได้ทันที", downloadAll:"ดาวน์โหลดรูปภาพทั้ง 6 บ้าน", saveReadings:"บันทึกเลขปัจจุบันเป็นเลขครั้งก่อน (รอบถัดไป)", downloadNote:"บน iPhone ให้กดดาวน์โหลดใต้บ้านทีละรายการ แล้วเลือก “บันทึกภาพ” ในเมนูแชร์ หากต้องการบันทึกลงแอปรูปภาพ",
+  footerNote:"วิธีคิด: ค่าไฟเฉลี่ยจัดสรร = ยอดบิล PEA ÷ หน่วยรวมมิเตอร์ย่อย 6 ตัว; ค่าไฟแต่ละบ้าน = หน่วยที่ใช้ × ค่าเฉลี่ยจัดสรร. ส่วนต่างระหว่างมิเตอร์หลักกับมิเตอร์ย่อยถูกกระจายตามสัดส่วนการใช้ไฟโดยอ้อม ไม่ใช่อัตราค่าไฟ PEA โดยตรง ควรตรวจสอบส่วนต่างและตกลงหลักเกณฑ์กับทุกบ้านก่อนเรียกเก็บเงินจริง.",
+  prev:"เลขครั้งก่อน", curr:"เลขครั้งนี้", unitsUsed:"หน่วยที่ใช้", enterMeter:"กรอกเลขมิเตอร์", downloadImage:"ดาวน์โหลดรูปภาพ", units:"หน่วย", baht:"บาท", calcTitle:"ใบแจ้งค่าไฟฟ้า", calcMethod:"วิธีคำนวณ", due:"ยอดที่ต้องชำระ", reference:"ข้อมูลอ้างอิง", billTotalShort:"ยอดบิล PEA", submeterTotal:"รวมมิเตอร์ย่อย", differenceShort:"ส่วนต่าง", allocatedDifference:"กระจายตามสัดส่วนการใช้ไฟ", noteImage:"หมายเหตุ: ยอดนี้ใช้จัดสรรค่าใช้จ่ายรวมตามสัดส่วนหน่วยของมิเตอร์ย่อย ไม่ใช่อัตราค่าไฟ PEA โดยตรง ควรตรวจสอบส่วนต่างและตกลงหลักเกณฑ์กับทุกบ้านก่อนเรียกเก็บเงินจริง", round:"รอบบิล",
+  errBill:"กรุณากรอกยอดบิล PEA ให้มากกว่า 0 บาท", errPea:"กรุณากรอกหน่วยจากมิเตอร์หลัก PEA ให้ถูกต้อง", errMeter:"กรุณาตรวจสอบเลขมิเตอร์ของ", errMeterEnd:"เลขครั้งนี้ต้องกรอกครบและไม่ต่ำกว่าเลขครั้งก่อน", errUnits:"หน่วยรวมมิเตอร์ย่อยต้องมากกว่า 0 จึงจะคำนวณได้", calculated:"คำนวณแล้ว", compared:"เทียบกับ PEA", hasDifference:"มีส่วนต่าง", allocated:"ยอดจัดสรรรวม", errCalculate:"กรุณากดคำนวณค่าไฟก่อนดาวน์โหลดรูปภาพ", errCreateImage:"สร้างรูปภาพไม่สำเร็จ กรุณาลองใหม่", shareTip:"บน iPhone ให้กด “ดาวน์โหลดรูปภาพ” ใต้บ้านทีละรายการ แล้วเลือก “บันทึกภาพ / Save Image” ในเมนูแชร์ เพื่อเก็บลงแอปรูปภาพ", errSave:"กรุณาคำนวณก่อนบันทึกเลขมิเตอร์", saved:"บันทึกเลขมิเตอร์ปัจจุบันเป็นเลขครั้งก่อนสำหรับรอบถัดไปแล้วบนอุปกรณ์นี้", savedStatus:"คืนค่าเลขครั้งก่อนตั้งต้นแล้ว กรุณากรอกเลขมิเตอร์ครั้งปัจจุบัน", languageButton:"English"
+ },
+ en: {
+  title:"Khao Yai Electricity Calculator", lead:"Enter the PEA bill total and each property's meter readings. The app allocates the bill proportionally and creates an image statement for each property to share.",
+  billHeading:"1. PEA Bill Information", billTotal:"Total bill amount (THB)", peaUnits:"Main PEA meter usage (kWh)", billPeriod:"Billing period / month", periodPlaceholder:"e.g. Nov 2026", billNote:"The amount is prefilled from your latest bill. Update it for each new billing period.",
+  metersHeading:"2. Enter Each Property's Meter Reading", calculate:"Calculate Bill", reset:"Reset Previous Readings", meterNote:"Previous readings are prefilled from the last period you provided. On this device, you can save current readings as the starting readings for the next period.",
+  summaryHeading:"3. Calculation Summary", totalUnits:"Total usage across 6 sub-meters", difference:"Difference vs. PEA", rate:"Average allocation rate", allocatedTotal:"Total allocated amount", initialStatus:"Enter the current meter reading for all 6 properties, then select “Calculate Bill”.",
+  imagesHeading:"4. Electricity Statements for Each Property", imageNote:"Select “Download Image” under a property to create a PNG statement that you can save or share.", downloadAll:"Download All 6 Images", saveReadings:"Save Current Readings for Next Period", downloadNote:"On iPhone, download one property's image at a time, then choose “Save Image” in the share menu to save it to Photos.",
+  footerNote:"Method: average allocation rate = total PEA bill ÷ total usage across the 6 sub-meters; each property's charge = its usage × the average rate. The difference between the main meter and sub-meters is indirectly distributed in proportion to usage. This is not the official PEA tariff. Review the difference and agree on the allocation method with all properties before collecting payment.",
+  prev:"Previous reading", curr:"Current reading", unitsUsed:"Usage", enterMeter:"Enter meter reading", downloadImage:"Download Image", units:"kWh", baht:"THB", calcTitle:"Electricity Bill Statement", calcMethod:"Calculation", due:"Amount Due", reference:"Reference Information", billTotalShort:"PEA bill total", submeterTotal:"Sub-meter total", differenceShort:"Difference", allocatedDifference:"allocated proportionally by usage", noteImage:"Note: This amount allocates the total bill in proportion to sub-meter usage; it is not the official PEA tariff. Review the difference and agree on the allocation method with all properties before collecting payment.", round:"Billing period",
+  errBill:"Please enter a PEA bill amount greater than 0.", errPea:"Please enter a valid usage value for the main PEA meter.", errMeter:"Please check the meter readings for", errMeterEnd:"The current reading is required and cannot be lower than the previous reading.", errUnits:"Total sub-meter usage must be greater than 0 to calculate the bill.", calculated:"Calculated", compared:"compared with PEA usage of", hasDifference:"Difference", allocated:"Total allocated amount", errCalculate:"Please calculate the bill before downloading images.", errCreateImage:"Could not create the image. Please try again.", shareTip:"On iPhone, select “Download Image” under each property, then choose “Save Image” in the share menu to save it to Photos.", errSave:"Please calculate the bill before saving meter readings.", saved:"Current readings have been saved as the previous readings for the next period on this device.", savedStatus:"Previous readings have been reset. Please enter the current meter readings.", languageButton:"ไทย"
+ }
+};
+const t = key => (translations[currentLang] && translations[currentLang][key]) || translations.th[key] || key;
+function applyLanguage(){
+ document.documentElement.lang=currentLang;
+ document.querySelectorAll("[data-i18n]").forEach(el=>{const key=el.getAttribute("data-i18n");if(t(key))el.textContent=t(key);});
+ document.querySelectorAll("[data-i18n-placeholder]").forEach(el=>{const key=el.getAttribute("data-i18n-placeholder");if(t(key))el.placeholder=t(key);});
+ $("languageBtn").textContent=t("languageButton");
+ // Update the existing meter cards without clearing any readings already entered.
+ meters.forEach((m,i)=>{
+   const card=$("meterInputs").children[i];
+   if(card){
+     const h=card.querySelector("h3"); if(h)h.textContent=`${i+1}. ${meterName(i)}`;
+     const labels=card.querySelectorAll("label"); if(labels[0])labels[0].textContent=t("prev"); if(labels[1])labels[1].textContent=t("curr");
+     const curr=$("curr"+i); if(curr)curr.placeholder=t("enterMeter");
+     const unit=$("unit"+i); if(unit && !latestResults)unit.textContent=t("unitsUsed")+": —";
+   }
+ });
+ if(latestResults){renderSummary(latestResults);renderResults(latestResults);} else {setInitialSummary();}
+}
+function setInitialSummary(){
+ $("summary").innerHTML=`<div class="stat"><span>${t("totalUnits")}</span><strong>—</strong></div><div class="stat"><span>${t("difference")}</span><strong>—</strong></div><div class="stat"><span>${t("rate")}</span><strong>—</strong></div><div class="stat"><span>${t("allocatedTotal")}</span><strong>—</strong></div>`;
+}
+
+
 function makeInputs(){
  const host=$("meterInputs"); host.innerHTML="";
  meters.forEach((m,i)=>{
    const card=document.createElement("div"); card.className="meter";
-   card.innerHTML=`<h3>${i+1}. ${m.name}</h3><div class="readings">
-   <div><label for="prev${i}">เลขครั้งก่อน</label><input id="prev${i}" type="number" min="0" step="1" value="${m.prev}"></div>
-   <div><label for="curr${i}">เลขครั้งนี้</label><input id="curr${i}" type="number" min="0" step="1" placeholder="กรอกเลขมิเตอร์"></div>
-   </div><p class="smallnote" id="unit${i}">หน่วยที่ใช้: —</p>`;
+   card.innerHTML=`<h3>${i+1}. ${meterName(i)}</h3><div class="readings">
+   <div><label for="prev${i}">${t("prev")}</label><input id="prev${i}" type="number" min="0" step="1" value="${m.prev}"></div>
+   <div><label for="curr${i}">${t("curr")}</label><input id="curr${i}" type="number" min="0" step="1" placeholder="${t("enterMeter")}"></div>
+   </div><p class="smallnote" id="unit${i}">${t("unitsUsed")}: —</p>`;
    host.appendChild(card);
  });
 }
 function calculate(){
  const bill=Number($("billTotal").value);
  const peaUnits=Number($("peaUnits").value);
- if(!Number.isFinite(bill)||bill<=0){showError("กรุณากรอกยอดบิล PEA ให้มากกว่า 0 บาท");return false;}
- if(!Number.isFinite(peaUnits)||peaUnits<0){showError("กรุณากรอกหน่วยจากมิเตอร์หลัก PEA ให้ถูกต้อง");return false;}
+ if(!Number.isFinite(bill)||bill<=0){showError(t("errBill"));return false;}
+ if(!Number.isFinite(peaUnits)||peaUnits<0){showError(t("errPea"));return false;}
  const rows=[];
  for(let i=0;i<meters.length;i++){
    const prev=Number($("prev"+i).value), curr=Number($("curr"+i).value);
    if($("curr"+i).value.trim()===""||!Number.isFinite(prev)||!Number.isFinite(curr)||prev<0||curr<prev||!Number.isInteger(prev)||!Number.isInteger(curr)){
-     showError(`กรุณาตรวจสอบเลขมิเตอร์ของ ${meters[i].name} เลขครั้งนี้ต้องกรอกครบและไม่ต่ำกว่าเลขครั้งก่อน`);return false;
+     showError(`${t("errMeter")} ${meterName(i)}. ${t("errMeterEnd")}`);return false;
    }
-   rows.push({name:meters[i].name,prev,curr,units:curr-prev,index:i});
+   rows.push({name:meters[i].name,displayName:meterName(i),prev,curr,units:curr-prev,index:i});
  }
  const totalUnits=rows.reduce((s,r)=>s+r.units,0);
- if(totalUnits<=0){showError("หน่วยรวมมิเตอร์ย่อยต้องมากกว่า 0 จึงจะคำนวณได้");return false;}
+ if(totalUnits<=0){showError(t("errUnits"));return false;}
  const rate=bill/totalUnits;
  rows.forEach(r=>r.amount=Math.round(r.units*rate*100)/100);
  // Keep total allocated amount equal to the bill after rounding to satang.
@@ -149,19 +197,19 @@ function calculate(){
 function showError(msg){$("status").className="status";$("status").textContent=msg;}
 function renderSummary(d){
  $("summary").innerHTML=`
- <div class="stat"><span>หน่วยรวม 6 มิเตอร์</span><strong>${fmt(d.totalUnits)} หน่วย</strong></div>
- <div class="stat"><span>ส่วนต่างเทียบ PEA</span><strong>${fmt(d.difference)} หน่วย</strong></div>
- <div class="stat"><span>อัตราเฉลี่ยจัดสรร</span><strong>${d.rate.toFixed(5)} บาท/หน่วย</strong></div>
- <div class="stat"><span>ยอดจัดสรรรวม</span><strong>${money(d.rows.reduce((s,r)=>s+r.amount,0))} บาท</strong></div>`;
+ <div class="stat"><span>${t("totalUnits")}</span><strong>${fmt(d.totalUnits)} ${t("units")}</strong></div>
+ <div class="stat"><span>${t("difference")}</span><strong>${fmt(d.difference)} ${t("units")}</strong></div>
+ <div class="stat"><span>${t("rate")}</span><strong>${d.rate.toFixed(5)} ${currentLang==="en"?"THB/kWh":"บาท/หน่วย"}</strong></div>
+ <div class="stat"><span>${t("allocatedTotal")}</span><strong>${money(d.rows.reduce((s,r)=>s+r.amount,0))} ${t("baht")}</strong></div>`;
  const status=$("status"); status.className="status ok";
- status.textContent=`คำนวณแล้ว: หน่วยรวมมิเตอร์ย่อย ${fmt(d.totalUnits)} หน่วย เทียบกับ PEA ${fmt(d.peaUnits)} หน่วย มีส่วนต่าง ${fmt(d.difference)} หน่วย ยอดจัดสรรรวม ${money(d.rows.reduce((s,r)=>s+r.amount,0))} บาท`;
- d.rows.forEach(r=>{const el=$("unit"+r.index);if(el)el.textContent=`หน่วยที่ใช้: ${fmt(r.units)} หน่วย`;});
+ status.textContent=currentLang==="en"?`${t("calculated")}: total sub-meter usage ${fmt(d.totalUnits)} kWh, ${t("compared")} ${fmt(d.peaUnits)} kWh. ${t("hasDifference")} ${fmt(d.difference)} kWh. ${t("allocated")}: ${money(d.rows.reduce((s,r)=>s+r.amount,0))} THB.`:`คำนวณแล้ว: หน่วยรวมมิเตอร์ย่อย ${fmt(d.totalUnits)} หน่วย เทียบกับ PEA ${fmt(d.peaUnits)} หน่วย มีส่วนต่าง ${fmt(d.difference)} หน่วย ยอดจัดสรรรวม ${money(d.rows.reduce((s,r)=>s+r.amount,0))} บาท`;
+ d.rows.forEach(r=>{const el=$("unit"+r.index);if(el)el.textContent=`${t("unitsUsed")}: ${fmt(r.units)} ${t("units")}`;});
 }
 function renderResults(d){
  const host=$("results");host.innerHTML="";
  d.rows.forEach(r=>{
   const card=document.createElement("div");card.className="result";
-  card.innerHTML=`<h3>${r.name}</h3><div class="units">${fmt(r.prev)} → ${fmt(r.curr)} • ใช้ ${fmt(r.units)} หน่วย</div><div class="amount">${money(r.amount)} บาท</div><button type="button" class="primary">ดาวน์โหลดรูปภาพ</button>`;
+  card.innerHTML=`<h3>${r.displayName||r.name}</h3><div class="units">${fmt(r.prev)} → ${fmt(r.curr)} • ${t("unitsUsed")} ${fmt(r.units)} ${t("units")}</div><div class="amount">${money(r.amount)} ${t("baht")}</div><button type="button" class="primary">${t("downloadImage")}</button>`;
   card.querySelector("button").addEventListener("click",()=>downloadImage(r,d));
   host.appendChild(card);
  });
@@ -177,33 +225,33 @@ async function downloadImage(r,d){
   ctx.fillStyle="#f2f6fb";ctx.fillRect(0,0,1080,1350);
   ctx.fillStyle="#ffffff";roundRect(ctx,35,35,1010,1280,28,true,false);
   ctx.fillStyle="#17365d";roundRect(ctx,35,35,1010,175,28,true,false);ctx.fillRect(35,170,1010,40);
-  ctx.textAlign="center";ctx.fillStyle="#ffffff";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText("ใบแจ้งค่าไฟฟ้า",540,88);
-  ctx.font="bold 36px Tahoma, sans-serif";ctx.fillText(r.name,540,145);
+  ctx.textAlign="center";ctx.fillStyle="#ffffff";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText(t("calcTitle"),540,88);
+  ctx.font="bold 36px Tahoma, sans-serif";ctx.fillText(r.displayName||r.name,540,145);
   ctx.textAlign="left";ctx.fillStyle="#27384a";ctx.font="26px Tahoma, sans-serif";
-  ctx.fillText("เลขมิเตอร์ครั้งก่อน",85,270);ctx.textAlign="right";ctx.font="bold 29px Tahoma, sans-serif";ctx.fillText(fmt(r.prev),985,270);
-  ctx.textAlign="left";ctx.font="26px Tahoma, sans-serif";ctx.fillText("เลขมิเตอร์ครั้งนี้",85,335);ctx.textAlign="right";ctx.font="bold 29px Tahoma, sans-serif";ctx.fillText(fmt(r.curr),985,335);
+  ctx.fillText(t("prev"),85,270);ctx.textAlign="right";ctx.font="bold 29px Tahoma, sans-serif";ctx.fillText(fmt(r.prev),985,270);
+  ctx.textAlign="left";ctx.font="26px Tahoma, sans-serif";ctx.fillText(t("curr"),85,335);ctx.textAlign="right";ctx.font="bold 29px Tahoma, sans-serif";ctx.fillText(fmt(r.curr),985,335);
   ctx.textAlign="left";ctx.fillStyle="#eaf2fa";roundRect(ctx,70,375,940,95,16,true,false);
-  ctx.fillStyle="#27384a";ctx.font="27px Tahoma, sans-serif";ctx.fillText("หน่วยไฟฟ้าที่ใช้",95,432);
-  ctx.textAlign="right";ctx.fillStyle="#176b45";ctx.font="bold 31px Tahoma, sans-serif";ctx.fillText(fmt(r.units)+" หน่วย",985,432);
-  ctx.textAlign="left";ctx.fillStyle="#17365d";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText("วิธีคำนวณ",85,535);
+  ctx.fillStyle="#27384a";ctx.font="27px Tahoma, sans-serif";ctx.fillText(t("unitsUsed"),95,432);
+  ctx.textAlign="right";ctx.fillStyle="#176b45";ctx.font="bold 31px Tahoma, sans-serif";ctx.fillText(fmt(r.units)+" "+t("units"),985,432);
+  ctx.textAlign="left";ctx.fillStyle="#17365d";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText(t("calcMethod"),85,535);
   ctx.fillStyle="#27384a";ctx.font="25px Tahoma, sans-serif";ctx.fillText(`${fmt(r.curr)} − ${fmt(r.prev)} = ${fmt(r.units)} หน่วย`,85,585);
-  ctx.font="23px Tahoma, sans-serif";ctx.fillText("อัตราเฉลี่ยจัดสรร = ยอดบิล PEA ÷ หน่วยรวมมิเตอร์ย่อย",85,640);
-  ctx.fillText(`${money(d.bill)} ÷ ${fmt(d.totalUnits)} = ${d.rate.toFixed(5)} บาท/หน่วย`,85,682);
-  ctx.fillText(`ค่าไฟ = ${fmt(r.units)} × ${d.rate.toFixed(5)}`,85,724);
+  ctx.font="23px Tahoma, sans-serif";ctx.fillText(currentLang==="en"?"Average allocation rate = PEA bill ÷ total sub-meter usage":"อัตราเฉลี่ยจัดสรร = ยอดบิล PEA ÷ หน่วยรวมมิเตอร์ย่อย",85,640);
+  ctx.fillText(`${money(d.bill)} ÷ ${fmt(d.totalUnits)} = ${d.rate.toFixed(5)} ${currentLang==="en"?"THB/kWh":"บาท/หน่วย"}`,85,682);
+  ctx.fillText(`${currentLang==="en"?"Electricity charge":"ค่าไฟ"} = ${fmt(r.units)} × ${d.rate.toFixed(5)}`,85,724);
   ctx.fillStyle="#fff0f0";roundRect(ctx,70,770,940,155,20,true,false);ctx.strokeStyle="#df7777";ctx.lineWidth=2;roundRect(ctx,70,770,940,155,20,false,true);
-  ctx.textAlign="center";ctx.fillStyle="#a72c2c";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText("ยอดที่ต้องชำระ",540,820);
-  ctx.font="bold 54px Tahoma, sans-serif";ctx.fillText(money(r.amount)+" บาท",540,885);
-  ctx.textAlign="left";ctx.fillStyle="#17365d";ctx.font="bold 22px Tahoma, sans-serif";ctx.fillText("ข้อมูลอ้างอิง",85,980);
-  ctx.fillStyle="#27384a";ctx.font="21px Tahoma, sans-serif";ctx.fillText(`ยอดบิล PEA: ${money(d.bill)} บาท`,85,1025);
-  ctx.fillText(`หน่วย PEA: ${fmt(d.peaUnits)} | รวมมิเตอร์ย่อย: ${fmt(d.totalUnits)} หน่วย`,85,1065);
-  ctx.fillStyle="#9a5b00";ctx.fillText(`ส่วนต่าง: ${fmt(d.difference)} หน่วย (กระจายตามสัดส่วนการใช้ไฟ)`,85,1105);
+  ctx.textAlign="center";ctx.fillStyle="#a72c2c";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText(t("due"),540,820);
+  ctx.font="bold 54px Tahoma, sans-serif";ctx.fillText(money(r.amount)+" "+t("baht"),540,885);
+  ctx.textAlign="left";ctx.fillStyle="#17365d";ctx.font="bold 22px Tahoma, sans-serif";ctx.fillText(t("reference"),85,980);
+  ctx.fillStyle="#27384a";ctx.font="21px Tahoma, sans-serif";ctx.fillText(`${t("billTotalShort")}: ${money(d.bill)} ${t("baht")}`,85,1025);
+  ctx.fillText(currentLang==="en"?`PEA usage: ${fmt(d.peaUnits)} | ${t("submeterTotal")}: ${fmt(d.totalUnits)} ${t("units")}`:`หน่วย PEA: ${fmt(d.peaUnits)} | รวมมิเตอร์ย่อย: ${fmt(d.totalUnits)} หน่วย`,85,1065);
+  ctx.fillStyle="#9a5b00";ctx.fillText(currentLang==="en"?`${t("differenceShort")}: ${fmt(d.difference)} kWh (${t("allocatedDifference")})`:`ส่วนต่าง: ${fmt(d.difference)} หน่วย (กระจายตามสัดส่วนการใช้ไฟ)`,85,1105);
   ctx.fillStyle="#687789";ctx.font="18px Tahoma, sans-serif";
-  let y=1155;y=wrapText(ctx,"หมายเหตุ: ยอดนี้ใช้จัดสรรค่าใช้จ่ายรวมตามสัดส่วนหน่วยของมิเตอร์ย่อย ไม่ใช่อัตราค่าไฟ PEA โดยตรง ควรตรวจสอบส่วนต่างและตกลงหลักเกณฑ์กับทุกบ้านก่อนเรียกเก็บเงินจริง",85,y,900,27);
-  if(d.period){ctx.fillText("รอบบิล: "+d.period,85,1265);}
+  let y=1155;y=wrapText(ctx,t("noteImage"),85,y,900,27);
+  if(d.period){ctx.fillText(t("round")+": "+d.period,85,1265);}
 
   const filename=`ค่าไฟ_${r.name.replace(/[() ]/g,"_")}.png`;
   const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));
-  if(!blob){showError("สร้างรูปภาพไม่สำเร็จ กรุณาลองใหม่");return;}
+  if(!blob){showError(t("errCreateImage"));return;}
 
   // iPhone/iPad: open the native share sheet so the user can choose Save Image.
   try{
@@ -225,30 +273,32 @@ function roundRect(ctx,x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.moveTo(x+r,y);
 $("calculateBtn").addEventListener("click",calculate);
 $("resetBtn").addEventListener("click",()=>{
  meters.forEach((m,i)=>{$("prev"+i).value=m.prev;$("curr"+i).value="";$("unit"+i).textContent="หน่วยที่ใช้: —";});
- $("results").innerHTML="";$("summary").innerHTML='<div class="stat"><span>หน่วยรวม 6 มิเตอร์</span><strong>—</strong></div><div class="stat"><span>ส่วนต่างเทียบ PEA</span><strong>—</strong></div><div class="stat"><span>อัตราเฉลี่ยจัดสรร</span><strong>—</strong></div><div class="stat"><span>ยอดจัดสรรรวม</span><strong>—</strong></div>';
- $("status").className="status";$("status").textContent="คืนค่าเลขครั้งก่อนตั้งต้นแล้ว กรุณากรอกเลขมิเตอร์ครั้งปัจจุบัน";
+ $("results").innerHTML="";setInitialSummary();
+ $("status").className="status";$("status").textContent=t("savedStatus");
  latestResults=null;
 });
 $("downloadAllBtn").addEventListener("click",()=>{
-  if(!latestResults){showError("กรุณากดคำนวณค่าไฟก่อนดาวน์โหลดรูปภาพ");return;}
+  if(!latestResults){showError(t("errCalculate"));return;}
   if(navigator.share && navigator.canShare){
-    showError("บน iPhone ให้กด “ดาวน์โหลดรูปภาพ” ใต้บ้านทีละรายการ แล้วเลือก “บันทึกภาพ / Save Image” ในเมนูแชร์ เพื่อเก็บลงแอปรูปภาพ");
+    showError(t("shareTip"));
     return;
   }
   latestResults.rows.forEach((r,i)=>setTimeout(()=>downloadImage(r,latestResults),i*350));
 });
 $("saveReadingsBtn").addEventListener("click",()=>{
- if(!latestResults){showError("กรุณาคำนวณก่อนบันทึกเลขมิเตอร์");return;}
+ if(!latestResults){showError(t("errSave"));return;}
  latestResults.rows.forEach((r,i)=>{meters[i].prev=r.curr;});
  // This browser app uses local storage to remember the new baseline on this device.
  try{localStorage.setItem("electricitySixMetersPrevious",JSON.stringify(meters.map(m=>m.prev)));}catch(e){}
- alert("บันทึกเลขมิเตอร์ปัจจุบันเป็นเลขครั้งก่อนสำหรับรอบถัดไปแล้วบนอุปกรณ์นี้");
+ alert(t("saved"));
 });
 try{
  const saved=JSON.parse(localStorage.getItem("electricitySixMetersPrevious")||"null");
  if(Array.isArray(saved)&&saved.length===6)saved.forEach((v,i)=>{if(Number.isInteger(v)&&v>=0)meters[i].prev=v;});
 }catch(e){}
 makeInputs();
+$("languageBtn").addEventListener("click",()=>{currentLang=currentLang==="th"?"en":"th";try{localStorage.setItem("electricityLanguage",currentLang);}catch(e){}applyLanguage();});
+applyLanguage();
 })();
 </script>
 </body>
