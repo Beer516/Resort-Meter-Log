@@ -171,36 +171,55 @@ function wrapText(ctx,text,x,y,maxWidth,lineHeight){
  for(const word of words){const test=line?line+" "+word:word;if(ctx.measureText(test).width>maxWidth&&line){ctx.fillText(line,x,y);line=word;y+=lineHeight;}else line=test;}
  if(line)ctx.fillText(line,x,y);return y+lineHeight;
 }
-function downloadImage(r,d){
- const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=1350;
- const ctx=canvas.getContext("2d");
- ctx.fillStyle="#f2f6fb";ctx.fillRect(0,0,1080,1350);
- ctx.fillStyle="#ffffff";roundRect(ctx,35,35,1010,1280,28,true,false);
- ctx.fillStyle="#17365d";roundRect(ctx,35,35,1010,175,28,true,false);ctx.fillRect(35,170,1010,40);
- ctx.textAlign="center";ctx.fillStyle="#ffffff";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText("ใบแจ้งค่าไฟฟ้า",540,88);
- ctx.font="bold 36px Tahoma, sans-serif";ctx.fillText(r.name,540,145);
- ctx.textAlign="left";ctx.fillStyle="#27384a";ctx.font="26px Tahoma, sans-serif";
- ctx.fillText("เลขมิเตอร์ครั้งก่อน",85,270);ctx.textAlign="right";ctx.font="bold 29px Tahoma, sans-serif";ctx.fillText(fmt(r.prev),985,270);
- ctx.textAlign="left";ctx.font="26px Tahoma, sans-serif";ctx.fillText("เลขมิเตอร์ครั้งนี้",85,335);ctx.textAlign="right";ctx.font="bold 29px Tahoma, sans-serif";ctx.fillText(fmt(r.curr),985,335);
- ctx.textAlign="left";ctx.fillStyle="#eaf2fa";roundRect(ctx,70,375,940,95,16,true,false);
- ctx.fillStyle="#27384a";ctx.font="27px Tahoma, sans-serif";ctx.fillText("หน่วยไฟฟ้าที่ใช้",95,432);
- ctx.textAlign="right";ctx.fillStyle="#176b45";ctx.font="bold 31px Tahoma, sans-serif";ctx.fillText(fmt(r.units)+" หน่วย",985,432);
- ctx.textAlign="left";ctx.fillStyle="#17365d";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText("วิธีคำนวณ",85,535);
- ctx.fillStyle="#27384a";ctx.font="25px Tahoma, sans-serif";ctx.fillText(`${fmt(r.curr)} − ${fmt(r.prev)} = ${fmt(r.units)} หน่วย`,85,585);
- ctx.font="23px Tahoma, sans-serif";ctx.fillText("อัตราเฉลี่ยจัดสรร = ยอดบิล PEA ÷ หน่วยรวมมิเตอร์ย่อย",85,640);
- ctx.fillText(`${money(d.bill)} ÷ ${fmt(d.totalUnits)} = ${d.rate.toFixed(5)} บาท/หน่วย`,85,682);
- ctx.fillText(`ค่าไฟ = ${fmt(r.units)} × ${d.rate.toFixed(5)}`,85,724);
- ctx.fillStyle="#fff0f0";roundRect(ctx,70,770,940,155,20,true,false);ctx.strokeStyle="#df7777";ctx.lineWidth=2;roundRect(ctx,70,770,940,155,20,false,true);
- ctx.textAlign="center";ctx.fillStyle="#a72c2c";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText("ยอดที่ต้องชำระ",540,820);
- ctx.font="bold 54px Tahoma, sans-serif";ctx.fillText(money(r.amount)+" บาท",540,885);
- ctx.textAlign="left";ctx.fillStyle="#17365d";ctx.font="bold 22px Tahoma, sans-serif";ctx.fillText("ข้อมูลอ้างอิง",85,980);
- ctx.fillStyle="#27384a";ctx.font="21px Tahoma, sans-serif";ctx.fillText(`ยอดบิล PEA: ${money(d.bill)} บาท`,85,1025);
- ctx.fillText(`หน่วย PEA: ${fmt(d.peaUnits)} | รวมมิเตอร์ย่อย: ${fmt(d.totalUnits)} หน่วย`,85,1065);
- ctx.fillStyle="#9a5b00";ctx.fillText(`ส่วนต่าง: ${fmt(d.difference)} หน่วย (กระจายตามสัดส่วนการใช้ไฟ)`,85,1105);
- ctx.fillStyle="#687789";ctx.font="18px Tahoma, sans-serif";
- let y=1155;y=wrapText(ctx,"หมายเหตุ: ยอดนี้ใช้จัดสรรค่าใช้จ่ายรวมตามสัดส่วนหน่วยของมิเตอร์ย่อย ไม่ใช่อัตราค่าไฟ PEA โดยตรง ควรตรวจสอบส่วนต่างและตกลงหลักเกณฑ์กับทุกบ้านก่อนเรียกเก็บเงินจริง",85,y,900,27);
- if(d.period){ctx.fillText("รอบบิล: "+d.period,85,1265);}
- const a=document.createElement("a");a.download=`ค่าไฟ_${r.name.replace(/[() ]/g,"_")}.png`;a.href=canvas.toDataURL("image/png");a.click();
+async function downloadImage(r,d){
+  const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=1350;
+  const ctx=canvas.getContext("2d");
+  ctx.fillStyle="#f2f6fb";ctx.fillRect(0,0,1080,1350);
+  ctx.fillStyle="#ffffff";roundRect(ctx,35,35,1010,1280,28,true,false);
+  ctx.fillStyle="#17365d";roundRect(ctx,35,35,1010,175,28,true,false);ctx.fillRect(35,170,1010,40);
+  ctx.textAlign="center";ctx.fillStyle="#ffffff";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText("ใบแจ้งค่าไฟฟ้า",540,88);
+  ctx.font="bold 36px Tahoma, sans-serif";ctx.fillText(r.name,540,145);
+  ctx.textAlign="left";ctx.fillStyle="#27384a";ctx.font="26px Tahoma, sans-serif";
+  ctx.fillText("เลขมิเตอร์ครั้งก่อน",85,270);ctx.textAlign="right";ctx.font="bold 29px Tahoma, sans-serif";ctx.fillText(fmt(r.prev),985,270);
+  ctx.textAlign="left";ctx.font="26px Tahoma, sans-serif";ctx.fillText("เลขมิเตอร์ครั้งนี้",85,335);ctx.textAlign="right";ctx.font="bold 29px Tahoma, sans-serif";ctx.fillText(fmt(r.curr),985,335);
+  ctx.textAlign="left";ctx.fillStyle="#eaf2fa";roundRect(ctx,70,375,940,95,16,true,false);
+  ctx.fillStyle="#27384a";ctx.font="27px Tahoma, sans-serif";ctx.fillText("หน่วยไฟฟ้าที่ใช้",95,432);
+  ctx.textAlign="right";ctx.fillStyle="#176b45";ctx.font="bold 31px Tahoma, sans-serif";ctx.fillText(fmt(r.units)+" หน่วย",985,432);
+  ctx.textAlign="left";ctx.fillStyle="#17365d";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText("วิธีคำนวณ",85,535);
+  ctx.fillStyle="#27384a";ctx.font="25px Tahoma, sans-serif";ctx.fillText(`${fmt(r.curr)} − ${fmt(r.prev)} = ${fmt(r.units)} หน่วย`,85,585);
+  ctx.font="23px Tahoma, sans-serif";ctx.fillText("อัตราเฉลี่ยจัดสรร = ยอดบิล PEA ÷ หน่วยรวมมิเตอร์ย่อย",85,640);
+  ctx.fillText(`${money(d.bill)} ÷ ${fmt(d.totalUnits)} = ${d.rate.toFixed(5)} บาท/หน่วย`,85,682);
+  ctx.fillText(`ค่าไฟ = ${fmt(r.units)} × ${d.rate.toFixed(5)}`,85,724);
+  ctx.fillStyle="#fff0f0";roundRect(ctx,70,770,940,155,20,true,false);ctx.strokeStyle="#df7777";ctx.lineWidth=2;roundRect(ctx,70,770,940,155,20,false,true);
+  ctx.textAlign="center";ctx.fillStyle="#a72c2c";ctx.font="bold 28px Tahoma, sans-serif";ctx.fillText("ยอดที่ต้องชำระ",540,820);
+  ctx.font="bold 54px Tahoma, sans-serif";ctx.fillText(money(r.amount)+" บาท",540,885);
+  ctx.textAlign="left";ctx.fillStyle="#17365d";ctx.font="bold 22px Tahoma, sans-serif";ctx.fillText("ข้อมูลอ้างอิง",85,980);
+  ctx.fillStyle="#27384a";ctx.font="21px Tahoma, sans-serif";ctx.fillText(`ยอดบิล PEA: ${money(d.bill)} บาท`,85,1025);
+  ctx.fillText(`หน่วย PEA: ${fmt(d.peaUnits)} | รวมมิเตอร์ย่อย: ${fmt(d.totalUnits)} หน่วย`,85,1065);
+  ctx.fillStyle="#9a5b00";ctx.fillText(`ส่วนต่าง: ${fmt(d.difference)} หน่วย (กระจายตามสัดส่วนการใช้ไฟ)`,85,1105);
+  ctx.fillStyle="#687789";ctx.font="18px Tahoma, sans-serif";
+  let y=1155;y=wrapText(ctx,"หมายเหตุ: ยอดนี้ใช้จัดสรรค่าใช้จ่ายรวมตามสัดส่วนหน่วยของมิเตอร์ย่อย ไม่ใช่อัตราค่าไฟ PEA โดยตรง ควรตรวจสอบส่วนต่างและตกลงหลักเกณฑ์กับทุกบ้านก่อนเรียกเก็บเงินจริง",85,y,900,27);
+  if(d.period){ctx.fillText("รอบบิล: "+d.period,85,1265);}
+
+  const filename=`ค่าไฟ_${r.name.replace(/[() ]/g,"_")}.png`;
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));
+  if(!blob){showError("สร้างรูปภาพไม่สำเร็จ กรุณาลองใหม่");return;}
+
+  // iPhone/iPad: open the native share sheet so the user can choose Save Image.
+  try{
+    const file=new File([blob],filename,{type:"image/png"});
+    if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:"ใบแจ้งค่าไฟฟ้า"});
+      return;
+    }
+  }catch(err){
+    if(err && err.name==="AbortError") return;
+  }
+
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.download=filename;a.href=url;
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
 }
 function roundRect(ctx,x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();if(fill)ctx.fill();if(stroke)ctx.stroke();}
 $("calculateBtn").addEventListener("click",calculate);
@@ -211,8 +230,12 @@ $("resetBtn").addEventListener("click",()=>{
  latestResults=null;
 });
 $("downloadAllBtn").addEventListener("click",()=>{
- if(!latestResults){showError("กรุณากดคำนวณค่าไฟก่อนดาวน์โหลดรูปภาพ");return;}
- latestResults.rows.forEach((r,i)=>setTimeout(()=>downloadImage(r,latestResults),i*350));
+  if(!latestResults){showError("กรุณากดคำนวณค่าไฟก่อนดาวน์โหลดรูปภาพ");return;}
+  if(navigator.share && navigator.canShare){
+    showError("บน iPhone ให้กด “ดาวน์โหลดรูปภาพ” ใต้บ้านทีละรายการ แล้วเลือก “บันทึกภาพ / Save Image” ในเมนูแชร์ เพื่อเก็บลงแอปรูปภาพ");
+    return;
+  }
+  latestResults.rows.forEach((r,i)=>setTimeout(()=>downloadImage(r,latestResults),i*350));
 });
 $("saveReadingsBtn").addEventListener("click",()=>{
  if(!latestResults){showError("กรุณาคำนวณก่อนบันทึกเลขมิเตอร์");return;}
