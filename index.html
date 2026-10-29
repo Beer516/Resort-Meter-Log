@@ -19,7 +19,9 @@ h2{font-size:19px;margin:0 0 12px;color:var(--navy)}
 .bill-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
 label{display:block;font-size:14px;font-weight:700;margin-bottom:6px}
 input{width:100%;min-width:0;border:1px solid #bdcbd9;border-radius:9px;padding:11px 12px;font:inherit;font-size:16px;background:#fff;color:var(--text)}
-input:focus{outline:3px solid #cfe4f8;border-color:var(--blue)}
+input:focus,select:focus{outline:3px solid #cfe4f8;border-color:var(--blue)}
+.month-picker{display:grid;grid-template-columns:1.3fr 1fr;gap:8px}
+select{width:100%;min-width:0;border:1px solid #bdcbd9;border-radius:9px;padding:11px 12px;font:inherit;font-size:16px;background:#fff;color:var(--text);min-height:48px}
 .meter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
 .meter{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fcfdff}
 .meter h3{margin:0 0 12px;font-size:17px;color:var(--navy)}
@@ -53,7 +55,15 @@ footer{font-size:13px;color:var(--muted);margin-top:18px}
     <div class="bill-grid">
       <div><label for="billTotal" data-i18n="billTotal">ยอดเงินบิลรวม (บาท)</label><input id="billTotal" type="number" min="0" step="0.01" value="27245.74"></div>
       <div><label for="peaUnits" data-i18n="peaUnits">หน่วยจากมิเตอร์หลัก PEA</label><input id="peaUnits" type="number" min="0" step="1" value="3656"></div>
-      <div><label for="billPeriod" data-i18n="billPeriod">รอบบิล / เดือน</label><input id="billPeriod" type="text" placeholder="เช่น พ.ย. 2569" data-i18n-placeholder="periodPlaceholder"></div>
+      <div>
+        <label data-i18n="billPeriod">รอบบิล / เดือน</label>
+        <div class="month-picker">
+          <select id="billMonth" aria-label="Billing month"></select>
+          <select id="billYear" aria-label="Billing year"></select>
+        </div>
+        <input id="billPeriod" type="hidden" value="">
+      </div>
+      <div><label for="recordedBy" data-i18n="recordedBy">ผู้จดบันทึก</label><input id="recordedBy" type="text" autocomplete="name" placeholder="ชื่อผู้จดบันทึก" data-i18n-placeholder="recorderPlaceholder"></div>
     </div>
     <p class="smallnote" data-i18n="billNote">ยอดเงินตัวอย่างจากบิลล่าสุดที่คุณส่งมา คุณสามารถแก้ไขเป็นยอดบิลรอบใหม่ได้</p>
   </section>
@@ -116,7 +126,7 @@ let currentLang = localStorage.getItem("electricityLanguage") || "th";
 const translations = {
  th: {
   title:"คำนวณค่าไฟฟ้า เขาใหญ่", lead:"กรอกยอดบิล PEA และเลขมิเตอร์แต่ละบ้าน ระบบจะคำนวณค่าไฟตามสัดส่วนหน่วยที่ใช้ พร้อมสร้างรูปภาพแยกบ้านสำหรับส่งทางแชต",
-  billHeading:"1. ข้อมูลจากบิล PEA", billTotal:"ยอดเงินบิลรวม (บาท)", peaUnits:"หน่วยจากมิเตอร์หลัก PEA", billPeriod:"รอบบิล / เดือน", periodPlaceholder:"เช่น พ.ย. 2569", billNote:"ยอดเงินตัวอย่างจากบิลล่าสุดที่คุณส่งมา คุณสามารถแก้ไขเป็นยอดบิลรอบใหม่ได้",
+  billHeading:"1. ข้อมูลจากบิล PEA", billTotal:"ยอดเงินบิลรวม (บาท)", peaUnits:"หน่วยจากมิเตอร์หลัก PEA", billPeriod:"รอบบิล / เดือน", periodPlaceholder:"เลือกเดือน", monthNames:["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"], recordedBy:"ผู้จดบันทึก", recorderPlaceholder:"กรอกชื่อผู้จดบันทึก", billNote:"ยอดเงินตัวอย่างจากบิลล่าสุดที่คุณส่งมา คุณสามารถแก้ไขเป็นยอดบิลรอบใหม่ได้",
   metersHeading:"2. กรอกเลขมิเตอร์แต่ละบ้าน", calculate:"คำนวณค่าไฟ", reset:"คืนค่าเลขครั้งก่อน", meterNote:"เลขครั้งก่อนตั้งต้นจากรอบล่าสุดที่คุณให้ไว้ หากใช้แอปในเครื่องเดิม สามารถบันทึกเลขครั้งปัจจุบันเป็นเลขครั้งก่อนสำหรับรอบถัดไปได้",
   summaryHeading:"3. สรุปการคำนวณ", totalUnits:"หน่วยรวม 6 มิเตอร์", difference:"ส่วนต่างเทียบ PEA", rate:"อัตราเฉลี่ยจัดสรร", allocatedTotal:"ยอดจัดสรรรวม", initialStatus:"กรอกเลขมิเตอร์ปัจจุบันให้ครบทั้ง 6 บ้าน แล้วกด “คำนวณค่าไฟ”",
   imagesHeading:"4. รูปแจ้งค่าไฟสำหรับแต่ละบ้าน", imageNote:"กดปุ่ม “ดาวน์โหลดรูปภาพ” ใต้บ้านที่ต้องการ ระบบจะสร้างรูป PNG เพื่อบันทึกหรือส่งต่อได้ทันที", downloadAll:"ดาวน์โหลดรูปภาพทั้ง 6 บ้าน", saveReadings:"บันทึกเลขปัจจุบันเป็นเลขครั้งก่อน (รอบถัดไป)", downloadNote:"บน iPhone ให้กดดาวน์โหลดใต้บ้านทีละรายการ แล้วเลือก “บันทึกภาพ” ในเมนูแชร์ หากต้องการบันทึกลงแอปรูปภาพ",
@@ -126,7 +136,7 @@ const translations = {
  },
  en: {
   title:"Khao Yai Electricity Calculator", lead:"Enter the PEA bill total and each property's meter readings. The app allocates the bill proportionally and creates an image statement for each property to share.",
-  billHeading:"1. PEA Bill Information", billTotal:"Total bill amount (THB)", peaUnits:"Main PEA meter usage (kWh)", billPeriod:"Billing period / month", periodPlaceholder:"e.g. Nov 2026", billNote:"The amount is prefilled from your latest bill. Update it for each new billing period.",
+  billHeading:"1. PEA Bill Information", billTotal:"Total bill amount (THB)", peaUnits:"Main PEA meter usage (kWh)", billPeriod:"Billing period / month", periodPlaceholder:"Select month", monthNames:["January","February","March","April","May","June","July","August","September","October","November","December"], recordedBy:"Recorded by", recorderPlaceholder:"Enter recorder name", billNote:"The amount is prefilled from your latest bill. Update it for each new billing period.",
   metersHeading:"2. Enter Each Property's Meter Reading", calculate:"Calculate Bill", reset:"Reset Previous Readings", meterNote:"Previous readings are prefilled from the last period you provided. On this device, you can save current readings as the starting readings for the next period.",
   summaryHeading:"3. Calculation Summary", totalUnits:"Total usage across 6 sub-meters", difference:"Difference vs. PEA", rate:"Average allocation rate", allocatedTotal:"Total allocated amount", initialStatus:"Enter the current meter reading for all 6 properties, then select “Calculate Bill”.",
   imagesHeading:"4. Electricity Statements for Each Property", imageNote:"Select “Download Image” under a property to create a PNG statement that you can save or share.", downloadAll:"Download All 6 Images", saveReadings:"Save Current Readings for Next Period", downloadNote:"On iPhone, download one property's image at a time, then choose “Save Image” in the share menu to save it to Photos.",
@@ -136,11 +146,35 @@ const translations = {
  }
 };
 const t = key => (translations[currentLang] && translations[currentLang][key]) || translations.th[key] || key;
+function syncBillingMonth(){
+ const month=Number($("billMonth").value);
+ const year=Number($("billYear").value);
+ if(month>=1&&month<=12&&year>0) $("billPeriod").value=`${year}-${String(month).padStart(2,"0")}`;
+}
+function setupBillingMonth(){
+ const now=new Date();
+ const monthSelect=$("billMonth"),yearSelect=$("billYear");
+ const chosen=$("billPeriod").value||`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`;
+ const [initialYear,initialMonth]=chosen.split("-").map(Number);
+ yearSelect.innerHTML="";
+ for(let y=now.getFullYear()-5;y<=now.getFullYear()+3;y++){
+   const opt=document.createElement("option");opt.value=y;
+   opt.textContent=currentLang==="th"?String(y+543):String(y);
+   yearSelect.appendChild(opt);
+ }
+ yearSelect.value=String(initialYear);
+ monthSelect.innerHTML="";
+ t("monthNames").forEach((name,i)=>{const opt=document.createElement("option");opt.value=String(i+1);opt.textContent=name;monthSelect.appendChild(opt);});
+ monthSelect.value=String(initialMonth);
+ syncBillingMonth();
+ monthSelect.onchange=syncBillingMonth;yearSelect.onchange=syncBillingMonth;
+}
 function applyLanguage(){
  document.documentElement.lang=currentLang;
  document.querySelectorAll("[data-i18n]").forEach(el=>{const key=el.getAttribute("data-i18n");if(t(key))el.textContent=t(key);});
  document.querySelectorAll("[data-i18n-placeholder]").forEach(el=>{const key=el.getAttribute("data-i18n-placeholder");if(t(key))el.placeholder=t(key);});
  $("languageBtn").textContent=t("languageButton");
+ setupBillingMonth();
  // Update the existing meter cards without clearing any readings already entered.
  meters.forEach((m,i)=>{
    const card=$("meterInputs").children[i];
@@ -169,6 +203,16 @@ function makeInputs(){
    host.appendChild(card);
  });
 }
+function formatBillingMonth(value){
+ if(!value) return "";
+ const [yearText,monthText]=value.split("-");
+ const year=Number(yearText), month=Number(monthText)-1;
+ if(!Number.isFinite(year)||month<0||month>11) return value;
+ if(currentLang==="en") return new Intl.DateTimeFormat("en-US",{month:"long",year:"numeric"}).format(new Date(year,month,1));
+ const thaiMonths=["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+ return `${thaiMonths[month]} ${year+543}`;
+}
+function setDefaultBillingMonth(){setupBillingMonth();}
 function calculate(){
  const bill=Number($("billTotal").value);
  const peaUnits=Number($("peaUnits").value);
@@ -190,7 +234,7 @@ function calculate(){
  const sum=rows.reduce((s,r)=>s+r.amount,0);
  rows[rows.length-1].amount=Math.round((rows[rows.length-1].amount+(Math.round(bill*100)-Math.round(sum*100))/100)*100)/100;
  rows.forEach(r=>r.shareUnits=totalUnits?peaUnits>0? r.units/totalUnits*(peaUnits-totalUnits):0:0);
- latestResults={bill,peaUnits,totalUnits,difference:peaUnits-totalUnits,rate,rows,period:$("billPeriod").value.trim()};
+ latestResults={bill,peaUnits,totalUnits,difference:peaUnits-totalUnits,rate,rows,period:formatBillingMonth($("billPeriod").value),recorder:$("recordedBy").value.trim()};
  renderSummary(latestResults); renderResults(latestResults);
  return true;
 }
@@ -247,7 +291,8 @@ async function createImageBlob(r,d){
   ctx.fillStyle="#9a5b00";ctx.fillText(currentLang==="en"?`${t("differenceShort")}: ${fmt(d.difference)} kWh (${t("allocatedDifference")})`:`ส่วนต่าง: ${fmt(d.difference)} หน่วย (กระจายตามสัดส่วนการใช้ไฟ)`,85,1105);
   ctx.fillStyle="#687789";ctx.font="18px Tahoma, sans-serif";
   let y=1155;y=wrapText(ctx,t("noteImage"),85,y,900,27);
-  if(d.period){ctx.fillText(t("round")+": "+d.period,85,1265);}
+  if(d.period){ctx.fillText(t("round")+": "+d.period,85,1240);}
+  if(d.recorder){ctx.fillText(t("recordedBy")+": "+d.recorder,85,1280);}
 
   const safeName=(r.name||`house_${r.index+1}`).replace(/[() ]/g,"_");
   const filename=`electricity_${safeName}.png`;
@@ -334,6 +379,7 @@ try{
  if(Array.isArray(saved)&&saved.length===6)saved.forEach((v,i)=>{if(Number.isInteger(v)&&v>=0)meters[i].prev=v;});
 }catch(e){}
 makeInputs();
+setDefaultBillingMonth();
 $("languageBtn").addEventListener("click",()=>{currentLang=currentLang==="th"?"en":"th";try{localStorage.setItem("electricityLanguage",currentLang);}catch(e){}applyLanguage();});
 applyLanguage();
 })();
